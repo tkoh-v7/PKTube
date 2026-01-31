@@ -1,7 +1,7 @@
 import { CONFIG } from "./config.js";
 
 export async function fetchPlaylist() {
-  const res = await fetch(CONFIG.playlistUrl, {
+  const res = await fetch("./videos.json", {
     method: "GET",
     credentials: "omit",
     cache: "no-store"
