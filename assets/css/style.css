@@ -302,3 +302,35 @@ body{
 
   white-space:nowrap;
 }
+.footer-actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.request-link{
+  display:inline-block;
+  padding:8px 12px;
+
+  border:1px solid var(--line);
+  border-radius:12px;
+
+  background: rgba(0,0,0,.25);
+
+  color: var(--parch);
+  font-weight:700;
+  text-decoration:none;
+
+  text-shadow: 0 1px 0 #000;
+}
+
+.request-link:hover{
+  border-color: var(--gold2);
+  color: var(--gold);
+  filter: brightness(1.1);
+}
+
+.request-link:active{
+  transform: translateY(1px);
+}
+
