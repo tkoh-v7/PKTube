@@ -24,8 +24,6 @@ body{
   letter-spacing: .2px;
 }
 
-/* ---------------- TOP BAR ---------------- */
-
 .topbar{
   display:flex;
   justify-content:space-between;
@@ -91,8 +89,6 @@ body{
   border-color:var(--gold2);
 }
 
-/* ---------------- LAYOUT ---------------- */
-
 .layout{
   display:grid;
   grid-template-columns: 1.6fr 1fr;
@@ -106,8 +102,6 @@ body{
   .layout{ grid-template-columns:1fr; }
 }
 
-/* ---------------- PLAYER ---------------- */
-
 .player-shell{
   background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.05));
   border:1px solid var(--line);
@@ -117,7 +111,6 @@ body{
   position: relative;
 }
 
-/* IMPORTANT: video sits BELOW meta for clickability */
 .video{
   width:100%;
   background:#000;
@@ -133,7 +126,7 @@ body{
     radial-gradient(600px 280px at 20% 0%, rgba(211,179,91,.08), transparent 60%),
     linear-gradient(180deg, var(--stone), var(--panel));
   position: relative;
-  z-index: 2; /* above video */
+  z-index: 2;
 }
 
 .title{
@@ -148,22 +141,18 @@ body{
   line-height:1.4;
 }
 
-/* ---------------- VOTES (GLOBAL 👍👎) ---------------- */
-
 .video-votes{
-  text-decoration:none;
   display:flex;
   align-items:center;
   gap:8px;
   margin:6px 0 12px;
   font-size:.95rem;
   position: relative;
-  z-index: 3; /* ABOVE VIDEO CONTROLS */
+  z-index: 3;
   pointer-events: auto;
 }
 
 .vote-count{
-  text-decoration:none;
   display:inline-flex;
   align-items:center;
   gap:6px;
@@ -174,6 +163,7 @@ body{
   cursor:pointer;
   user-select:none;
   pointer-events:auto;
+  text-decoration:none;
 }
 
 .vote-click:hover{
@@ -183,14 +173,8 @@ body{
 .vote-click.active{
   color:var(--gold);
   font-weight:700;
-  text-decoration:underline;
+  text-decoration:none;
 }
-
-.vote-sep{
-  opacity:.6;
-}
-
-/* ---------------- TAGS ---------------- */
 
 .meta-row{
   display:flex;
@@ -214,8 +198,6 @@ body{
   color:var(--parch);
   white-space:nowrap;
 }
-
-/* ---------------- CONTROLS ---------------- */
 
 .controls{
   display:flex;
@@ -242,8 +224,6 @@ body{
   color:var(--soft);
   min-height:18px;
 }
-
-/* ---------------- SIDEBAR ---------------- */
 
 .sidebar{
   border:1px solid var(--line);
@@ -310,8 +290,6 @@ body{
   margin-top:4px;
 }
 
-/* ---------------- FOOTER ---------------- */
-
 .footer{
   max-width:1200px;
   margin:0 auto;
@@ -343,10 +321,7 @@ body{
 
 .bmac-link:hover{ filter:brightness(1.12); }
 
-/* ---------------- MOBILE TIDY ---------------- */
-
 @media (max-width:640px){
-
   .topbar{
     flex-direction:column;
     align-items:stretch;
