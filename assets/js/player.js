@@ -1,5 +1,6 @@
 import { safeText, setQs } from "./utils.js";
 import { saveState, incrementView, getViews } from "./storage.js";
+import { CONFIG } from "./config.js"; // ✅ ADDED
 
 export function createPlayer({
   videoEl,
@@ -20,6 +21,7 @@ export function createPlayer({
   function loadVideo(video) {
     countedView = false;
     currentVideoId = video.id;
+
     const views = getViews(video.id);
     titleEl.textContent = `${safeText(video.title)} | ${views} views`;
 
@@ -64,14 +66,33 @@ export function createPlayer({
 
   function bindProgressPersistence() {
     videoEl.addEventListener("timeupdate", () => {
+      // ---- COUNT VIEW AFTER 5 SECONDS ----
       if (!countedView && currentVideoId && videoEl.currentTime >= 5) {
         countedView = true;
+
+        // ✅ EXISTING local view (kept as fallback / UI continuity)
         incrementView(currentVideoId);
 
         const views = getViews(currentVideoId);
         titleEl.textContent = `${safeText(titleEl.textContent.split(" | ")[0])} | ${views} views`;
+
+        // ✅ NEW: Global view via Cloudflare Worker
+        if (CONFIG.workerUrl) {
+          fetch(`${CONFIG.workerUrl}/view`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              id: currentVideoId
+            })
+          }).catch(() => {
+            // Fail silently — NEVER break playback
+          });
+        }
       }
 
+      // ---- SAVE PROGRESS ----
       if (Math.floor(videoEl.currentTime) % 5 === 0) {
         saveState({ t: Math.floor(videoEl.currentTime) });
       }
