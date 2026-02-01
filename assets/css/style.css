@@ -374,3 +374,11 @@ body{
 .vote-count {
   opacity: 0.85;
 }
+.vote-click {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.video-votes {
+  pointer-events: auto;
+}
