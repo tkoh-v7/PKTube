@@ -1,6 +1,6 @@
 import { safeText, setQs } from "./utils.js";
 import { saveState, incrementView, getViews } from "./storage.js";
-import { CONFIG } from "./config.js"; // ✅ ADDED
+import { CONFIG } from "./config.js";
 
 export function createPlayer({
   videoEl,
@@ -22,8 +22,27 @@ export function createPlayer({
     countedView = false;
     currentVideoId = video.id;
 
-    const views = getViews(video.id);
-    titleEl.textContent = `${safeText(video.title)} | ${views} views`;
+    titleEl.textContent = `${safeText(video.title)} | loading views…`;
+
+    // 🔹 GLOBAL views from Worker (authoritative)
+    if (CONFIG.workerUrl) {
+      fetch(`${CONFIG.workerUrl}/video/${video.id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (typeof data.views === "number") {
+            titleEl.textContent = `${safeText(video.title)} | ${data.views} views`;
+          } else {
+            throw new Error("Invalid worker response");
+          }
+        })
+        .catch(() => {
+          const localViews = getViews(video.id);
+          titleEl.textContent = `${safeText(video.title)} | ${localViews} views`;
+        });
+    } else {
+      const localViews = getViews(video.id);
+      titleEl.textContent = `${safeText(video.title)} | ${localViews} views`;
+    }
 
     descEl.textContent = safeText(video.description);
 
@@ -66,29 +85,26 @@ export function createPlayer({
 
   function bindProgressPersistence() {
     videoEl.addEventListener("timeupdate", () => {
-      // ---- COUNT VIEW AFTER 5 SECONDS ----
       if (!countedView && currentVideoId && videoEl.currentTime >= 5) {
         countedView = true;
-
-        // ✅ EXISTING local view (kept as fallback / UI continuity)
         incrementView(currentVideoId);
-
-        const views = getViews(currentVideoId);
-        titleEl.textContent = `${safeText(titleEl.textContent.split(" | ")[0])} | ${views} views`;
-
-        // ✅ NEW: Global view via Cloudflare Worker
         if (CONFIG.workerUrl) {
           fetch(`${CONFIG.workerUrl}/view`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-              id: currentVideoId
+            body: JSON.stringify({ id: currentVideoId })
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (typeof data.views === "number") {
+                titleEl.textContent =
+                  `${safeText(titleEl.textContent.split(" | ")[0])} | ${data.views} views`;
+              }
             })
-          }).catch(() => {
-            // Fail silently — NEVER break playback
-          });
+            .catch(() => {
+            });
         }
       }
 
