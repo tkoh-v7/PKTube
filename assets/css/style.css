@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Bytesized&family=Playwrite+NZ+Basic&display=swap');
 :root{
   --bg:#0b0b0b;
   --stone:#14110f;
@@ -68,7 +69,17 @@ body{
       #0b0b0b 100%
     );
 }
-
+.PixelFont {
+  font-family: "Bytesized", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.SmartFont {
+ font-family: "Playwrite NZ Basic", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
 
 .topbar::after{
   content:"";
